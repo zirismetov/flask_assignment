@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{{url_for('static', filename= 'css/main.css')}}" type="text/css">
+        <title>Space Invaders Game</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/nicolaspanel/numjs@0.15.1/dist/numjs.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
+         <script type="text/javascript">
+             let top_records = {{ records |safe }}
+        </script>
+        <style type="text/css">
+
+
+        </style>
+    </head>
+    <body>
+        <div id="header">
+            <div id="header_score" style="display:block;">Score: <span class="span_score"></span></div>
+            <div id="header_lives" style="display: block"></div>
+        </div>
+        <div class="break"></div>
+        <div id="scene">
+            <div id="overlay" style="display: none">
+                <form method="post">
+                    <span>Your score: <span class="span_score"></span></span><br/>
+                    <div id="top_scores_div" style="display: block">
+                        <span>Top 10 scores: <ol id="top_list">
+                    </ol></span>
+                    </div>
+                    <div id="submit" style="display: none">
+                        <span>Your name:</span><br/>
+                        <input type="text" name="player_name" /><br/>
+                        <input id="button_submit" type="submit"><br/>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="break"></div>
+        <div id="div_restart">
+            <button type="button" id="button_restart">Restart?</button>
+        </div>
+
+        <script type="text/javascript" src="{{ url_for ('index_js') }}">
+        </script>
+
+
+    </body>
+</html>

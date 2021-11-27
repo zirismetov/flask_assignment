@@ -1,0 +1,106 @@
+html, body {
+    background-color: black;
+    width: 100%;
+    overflow: hidden; /* hide scrollbar */
+    color: #ffffff; /* white text */
+    font-size: 14px;
+    line-height: 20px;
+    font-family: monospace;
+}
+
+/* has tag mean id */
+#scene {
+    margin: 0 auto; /* margin top: 0 and margin sides are auto */
+    border-width: 1px;
+    border-color: lightgray;
+    border-style: solid;
+    width: 220px; /* 11 emojis 20x20 */
+    height: 300px; /* 15 emojis */
+    position: relative;
+}
+
+/* . dot means class attribute */
+.element {
+    position: absolute;
+    /* transition: top 0.2s, left 0.2s; /* automatically animates changing top or left props */
+}
+
+.alien::after {
+    content: '👾';
+}
+
+.generic::after {
+    content: '⬜';
+}
+
+.wall::after {
+    content: '🏛';
+}
+
+.player::after {
+    content: '📤';
+}
+
+.rocket-up::after {
+    content: '🔺';
+}
+
+.rocket-down::after {
+    content: '🔻';
+}
+
+.explosion::after {
+    content: '💥';
+}
+
+#header {
+    width: 220px;
+    margin: 50px auto;
+}
+#header_score {
+    float: left; /* divs can be floated to left and right but then you need to clear them */
+}
+#header_lives {
+    float: right;
+}
+.break {
+    clear: both;
+}
+
+#overlay{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #333333cc;
+    z-index: 900;
+
+}
+
+#overlay > form{
+    padding: 30px;
+}
+
+#overlay input{
+    margin-top: 10px;
+}
+
+#overlay > form > input[name="player_name"]{
+    margin-top: 0;
+}
+#div_restart{
+    display: table;
+    background-color: black;
+    position: relative;
+    margin: 0 auto;
+}
+#button_restart{
+    background-color: black;
+    position: relative;
+    color: white;
+    border: none;
+    z-index: 1000;
+
+}
+#button_submit{
+    margin-top: 5px;
+}
