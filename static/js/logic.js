@@ -1,6 +1,11 @@
 const SCENE_WIDTH = 10;
 const SCENE_HEIGHT = 15;
 
+$(document).ready(function (){
+    $.getJSON('/get_rec', function (records){
+        JHIGH_SCORES = records
+    })
+});
 
 class Element {
     #position = null;
@@ -296,9 +301,9 @@ class GameState {
         this.jScene = $('#scene'); // CSS selector
         this.elements = [];
         this.player = null;
-        this.is_game_running = false;
-        this.score = 11;
-        this.lives = 3;
+        this.is_game_running = true;
+        this.score = 5;
+        this.lives = 1;
     }
 
     static get instance() {
@@ -488,59 +493,51 @@ $(document).bind('keydown', ( event ) => {
     }
 });
 
-function get_high_scores(){
-    return top_records;
+function show_overlay(){
+    $(`#header_lives`).css('display', 'none');
+    $(`#header_score`).css('display', 'none');
+    $(`#top_scores_div`).css('display', 'none');
+    $(`#button_restart`).css('display', 'block');
+    $(`#overlay`).css('display', 'block');
 
+    if (JHIGH_SCORES.length === 0){
+        $(`#submit`).css('display', 'block');
+    }else {
+        if(!check_high_score(JHIGH_SCORES)){
+            show_top_ten(JHIGH_SCORES);
+        }
+    }
 }
-
-// console.log(get_high_scores());/
-
 function check_high_score(scores) {
     for (let i = 0; i< scores.length; i++) {
-        if (i === 10){
-            return false
-        }
-        if (parseInt(GameState.instance.score) > parseInt(scores[i][1]) ||
-            scores.length < 11) {
-            $(`#top_scores_div`).css('display', 'none');
-            $(`#submit`).css('display', 'block');
-            return true;
+        if (i < 10) {
+            if (parseInt(GameState.instance.score) > parseInt(scores[i][1]) ||
+                scores.length < 10) {
+                $(`#top_scores_div`).css('display', 'none');
+                $(`#submit`).css('display', 'block');
+                return true;
             }
+        }
     }
     return false;
-
     }
 
-
-
-function show_top_ten(scores) {
-    for (let i = 0; i < scores.length; i++) {
-        player_name = scores[i][0]
-        player_score = scores[i][1]
+function show_top_ten(record) {
+    for (let i = 0; i < record.length; i++) {
+        if (i < 10){
+        player_name = record[i][0]
+        player_score = record[i][1]
         let html = '<li><span>' + player_name + ": " + player_score + '</span></li>';
         $('#top_list').append(html);
-        if (i === 9) {
+        }else {
             break;
         }
     }
     $(`#top_scores_div`).css('display', 'block');
 }
 
-function show_overlay(){
-    $(`#header_lives`).css('display', 'none');
-    $(`#header_score`).css('display', 'none');
-    $(`#top_scores_div`).css('display', 'none')
-    $(`#overlay`).css('display', 'block');
 
-    let scores = get_high_scores();
-    if (scores.length === 0){
-        $(`#submit`).css('display', 'block');
-    }else {
-        if(!check_high_score(scores)){
-            show_top_ten(scores);
-        }
-    }
-}
+
 
 $(`#button_restart`).click(function (){location.reload()})
 
@@ -563,7 +560,5 @@ $(`#overlay > form:first`).submit((event) =>{
         $(`#submit`).css('display', 'none');
         show_top_ten(record);
     })
-
-
 
 })
