@@ -1,13 +1,13 @@
+import json
 import time
-
 from flask import Flask, render_template, redirect, url_for, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import desc
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///HighScoreDatabase.sqlite'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///HighScoreDatabase.sqlite?check_same_thread=False'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 
 class ScoreRecords(db.Model):
@@ -31,32 +31,35 @@ def index():
         except Exception as e:
             print('Data NOT insterted to DB! {}'.format(e))
     else:
-        records = get_json_records()
+        records = get_json_records().json
         return render_template('JS_7_basics_space_invaders_Zafarzhon_Irismetov.html', records = records )
 
 def add_data(data):
     player_name = list(data)[0]
     score = data.get(player_name)
-    json_records = get_json_records()
-
-    if player_name in json_records:
-        record = ScoreRecords.query.get(player_name)
-        record.score = score
-        db.session.commit()
-    else:
+    json_records = get_json_records().json
+    if check_data(name=player_name, score= score, data=json_records):
         record = ScoreRecords(player_name=player_name, score=score)
-        db.session.add(data)
+        db.session.add(record)
         db.session.commit()
-    db.session.close()
-    print('Data insterted to DB!')
+        print('Data insterted to DB!')
+
+def check_data(name, score , data):
+    for i in data:
+        if name == i[0]:
+            record = ScoreRecords.query.filter_by(player_name=name).first()
+            record.score = score
+            db.session.commit()
+            return False
+    return True
 
 def get_json_records():
     info = {}
-    players = ScoreRecords.query.order_by(desc(ScoreRecords.score)).all()
+    players = ScoreRecords.query.all()
     for i in range(len(players)):
         info[players[i].player_name] = players[i].score
     info = sorted(info.items(), key=lambda x: x[1], reverse=True)
-    record = jsonify(info).json
+    record = jsonify(info)
     return record
 
 if __name__ == '__main__':

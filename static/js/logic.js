@@ -297,7 +297,7 @@ class GameState {
         this.elements = [];
         this.player = null;
         this.is_game_running = false;
-        this.score = 0;
+        this.score = 11;
         this.lives = 3;
     }
 
@@ -496,30 +496,29 @@ function get_high_scores(){
 // console.log(get_high_scores());/
 
 function check_high_score(scores) {
-    let i = 0;
-    for (let name in scores) {
-        i++;
-        if (i === 9){
+    for (let i = 0; i< scores.length; i++) {
+        if (i === 10){
             return false
         }
-        if (parseInt(GameState.instance.score) > parseInt(scores[name]) ||
-            Object.keys(scores).length < 10) {
+        if (parseInt(GameState.instance.score) > parseInt(scores[i][1]) ||
+            scores.length < 11) {
             $(`#top_scores_div`).css('display', 'none');
             $(`#submit`).css('display', 'block');
-            return true
-        }else {
-            return false
-        }
+            return true;
+            }
     }
-}
+    return false;
+
+    }
+
 
 
 function show_top_ten(scores) {
-    let i = 0
-    for (let name in scores) {
-        let html = '<li><span>' + name + ": " + scores[name] + '</span></li>';
+    for (let i = 0; i < scores.length; i++) {
+        player_name = scores[i][0]
+        player_score = scores[i][1]
+        let html = '<li><span>' + player_name + ": " + player_score + '</span></li>';
         $('#top_list').append(html);
-        i++;
         if (i === 9) {
             break;
         }
@@ -534,7 +533,7 @@ function show_overlay(){
     $(`#overlay`).css('display', 'block');
 
     let scores = get_high_scores();
-    if (Object.keys(scores).length === 0){
+    if (scores.length === 0){
         $(`#submit`).css('display', 'block');
     }else {
         if(!check_high_score(scores)){
