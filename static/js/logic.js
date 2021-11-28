@@ -297,7 +297,7 @@ class GameState {
         this.elements = [];
         this.player = null;
         this.is_game_running = false;
-        this.score = 10;
+        this.score = 0;
         this.lives = 3;
     }
 
@@ -489,7 +489,6 @@ $(document).bind('keydown', ( event ) => {
 });
 
 function get_high_scores(){
-    // let json_high_score = Cookies.get(COOKIE_HIGH_SCORES)
     return top_records;
 
 }
@@ -505,7 +504,7 @@ function check_high_score(scores) {
         }
         if (parseInt(GameState.instance.score) > parseInt(scores[name]) ||
             Object.keys(scores).length < 10) {
-            $(`#top_scores`).css('display', 'none');
+            $(`#top_scores_div`).css('display', 'none');
             $(`#submit`).css('display', 'block');
             return true
         }else {
@@ -520,7 +519,7 @@ function show_top_ten(scores) {
     for (let name in scores) {
         let html = '<li><span>' + name + ": " + scores[name] + '</span></li>';
         $('#top_list').append(html);
-        i++
+        i++;
         if (i === 9) {
             break;
         }
@@ -528,21 +527,14 @@ function show_top_ten(scores) {
     $(`#top_scores_div`).css('display', 'block');
 }
 
-
-//The logic of UI is so:
-// Via function show_overlay() I check for current player score with already sorted list of high scores
-// In if cookies are clear we auto enabling submit div block
-// Line 743 - after pressing submit the name - dumbit block disables and score board appear by calling show_top_10()
-//The score comparison is in check_high_score(), if current score is larger than top 10 , or if
-// the list of scores don't contain 10 elements we can add it.
 function show_overlay(){
     $(`#header_lives`).css('display', 'none');
     $(`#header_score`).css('display', 'none');
+    $(`#top_scores_div`).css('display', 'none')
     $(`#overlay`).css('display', 'block');
 
     let scores = get_high_scores();
     if (Object.keys(scores).length === 0){
-        $(`#top_scores`).css('display', 'none')
         $(`#submit`).css('display', 'block');
     }else {
         if(!check_high_score(scores)){

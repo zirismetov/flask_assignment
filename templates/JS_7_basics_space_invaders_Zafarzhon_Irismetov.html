@@ -27,7 +27,7 @@
             <div id="overlay" style="display: none">
                 <form method="post">
                     <span>Your score: <span class="span_score"></span></span><br/>
-                    <div id="top_scores_div" style="display: block">
+                    <div id="top_scores_div" style="display: none">
                         <span>Top 10 scores: <ol id="top_list">
                     </ol></span>
                     </div>
@@ -44,7 +44,7 @@
             <button type="button" id="button_restart">Restart?</button>
         </div>
 
-        <script type="text/javascript" src="{{ url_for ('index_js') }}">
+        <script type="text/javascript" src="{{url_for('static', filename= 'js/logic.js')}}">
         </script>
 
 
